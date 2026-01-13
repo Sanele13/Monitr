@@ -12,7 +12,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.monitr.R;
 import com.example.monitr.data.budget.Budget;
 import com.example.monitr.databinding.FragmentDashboardBinding;
 
@@ -29,11 +32,11 @@ public class DashboardFragment extends Fragment {
         View root = binding.getRoot();
 
         dashboardViewModel.getBudgets().observe(getViewLifecycleOwner(), budgets -> {
-            StringBuilder sb = new StringBuilder();
-            for (Budget b : budgets) {
-                sb.append(b.getTitle()).append("\n");
-            }
-            binding.budgetsText.setText(sb.toString());
+            RecyclerView recyclerView = binding.recyclerView;
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+            BudgetAdapter adapter = new BudgetAdapter(budgets);
+            recyclerView.setAdapter(adapter);
 
             Log.d("Budgets", "Count: " + budgets.size());
         });
